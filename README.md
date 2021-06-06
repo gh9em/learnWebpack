@@ -3,38 +3,49 @@
 # Principle
 ## Work principle
 ```
-|---------------------------------------|
-||--------|  |--------|                 |
-||JS entry|>>|Module A|                 |
-||--------|  |--------|     ...         |
-|    ↓           ↓           ↑          |
-||--------|  |--------|  |--------|     |
-||Module B|>>|Module C|>>|Module D|     |
-||--------|  |--------|  |--------|     |
-|    ↓           ↑           ↓          |
-||--------|  |--------|  |--------|     |
-||Module E|>>|Module F|<<|Module G|>>...|
-||--------|  |--------|  |--------|     |
-|---------------------------------------|
-             Web ↓ pack
-          |--------------|
-          | |----------| |
-          | | bundle.js| |
-          | |----------| |
-          |      ↓       |
-          | |----------| |
-          | |index.html| |
-          | |----------| |
-          |--------------|
+|-------------------------------------------------|
+||------------------|  |--------|                 |
+||     JS entry     |>>| Module |                 |
+||(default index.js)|>>|   A    |                 |
+||------------------|  |--------|     ...         |
+|          ↓               ↓           ↑          |
+|     |--------|       |--------|  |--------|     |
+|     |Module B|>>>>>>>|Module C|>>|Module D|     |
+|     |--------|       |--------|  |--------|     |
+|          ↓               ↑           ↓          |
+|     |--------|       |--------|  |--------|     |
+|     |Module E|>>>>>>>|Module F|<<|Module G|>>...|
+|     |--------|       |--------|  |--------|     |
+|-------------------------------------------------|
+                 Web ↓ pack
+        |------------------------|
+        | |--------------------| |
+        | |     JS output      | |
+        | | (default bundle.js)| |
+        | |--------------------| |
+        |                        |
+        | |--------------------| |
+        | |       *.css        | |
+        | |--------------------| |
+        |                        |
+        | |--------------------| |
+        | |       *.png        | |
+        | |--------------------| |
+        |           ...          |
+        |------------------------|
 ```
 ## Project structure
 ```bash
-|-public # store static pages(*.html)
+|-dist
+| |--bundle.js # webpack output
+|-src
+| |--index.js # webpack entry
 | |--*.html
-|-app # store dynamics, such as: *.js, *.css
-| |--main.js # project & depend-analyze entry
 | |--*.js
 | |--*.css
+| |--*.png
+| |--...
+|-webpack.config.js
 |-package.json
 ```
 
@@ -55,9 +66,35 @@ npm install -g npm
 # Setup
 ## Project
 + new
-  ```bash
-  npm init
-  ```
+  1. init
+     ```bash
+     npm init
+     mkdir src
+     ```
+  2. config `package.json`
+     ```json
+     {
+       ...
+       // instead of entry field `"main": "index.js",`
+       "private": true,
+       ...
+     }
+     ```
+  3. create file `webpack.config.js`
+     ```js
+     // npm not support `import` yet
+     // import 'path';
+     const path = require('path');
+
+     module.exports = {
+       // webpack entry
+       entry: './src/index.js',
+       output: {
+         filename: 'bundle.js',
+         path: path.resolve(__dirname, 'dist'),
+       },
+     };
+     ```
 + load exist
   ```bash
   npm install
@@ -66,4 +103,8 @@ npm install -g npm
 ```bash
 # provided dependency
 npm install --save-dev webpack
+```
+# Compile
+```bash
+node_modules/.bin/webpack
 ```
