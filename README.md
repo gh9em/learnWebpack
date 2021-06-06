@@ -17,22 +17,22 @@
 |     |Module E|>>>>>>>|Module F|<<|Module G|>>...|
 |     |--------|       |--------|  |--------|     |
 |-------------------------------------------------|
-                 Web ↓ pack
-        |------------------------|
-        | |--------------------| |
-        | |     JS output      | |
-        | | (default bundle.js)| |
-        | |--------------------| |
-        |                        |
-        | |--------------------| |
-        | |       *.css        | |
-        | |--------------------| |
-        |                        |
-        | |--------------------| |
-        | |       *.png        | |
-        | |--------------------| |
-        |           ...          |
-        |------------------------|
+              Web ↓ pack
+        |---------------------|
+        | |-----------------| |
+        | |    JS output    | |
+        | |(default main.js)| |
+        | |-----------------| |
+        |                     |
+        | |-----------------| |
+        | |      *.css      | |
+        | |-----------------| |
+        |                     |
+        | |-----------------| |
+        | |      *.png      | |
+        | |-----------------| |
+        |         ...         |
+        |---------------------|
 ```
 ## Project structure
 ```bash
@@ -80,7 +80,7 @@ npm install -g npm
        ...
      }
      ```
-  3. create file `webpack.config.js`
+  3. create `webpack.config.js`
      ```js
      // npm not support `import` yet
      // import 'path';
@@ -90,7 +90,7 @@ npm install -g npm
        // webpack entry
        entry: './src/index.js',
        output: {
-         filename: 'bundle.js',
+         filename: 'main.js',
          path: path.resolve(__dirname, 'dist'),
        },
      };
@@ -101,10 +101,45 @@ npm install -g npm
   ```
 ## Dependency
 ```bash
-# provided dependency
+# `--save-dev` means provided dependency
 npm install --save-dev webpack
 ```
 # Compile
 ```bash
-node_modules/.bin/webpack
+# npx webpack(since Node@8.2 and npm@5.2.0)
+node_modules/.bin/webpack --config webpack.config.js
+```
+# Loader
+## CSS Loader
+### Principle
+```
+|-------|  |------------|  |----------| <style>...</style>  |--------|
+| *.css |>>|style-loader|>>|css-loader|>>>>>>>>>>>>>>>>>>>>>| *.html |
+|-------|  |------------|  |----------|                     |--------|
+```
+### Usage
+1. add dependency
+   ```bash
+   npm install --save-dev style-loader css-loader
+   ```
+2. config `webpack.config.js`
+   ```js
+   ...
+   module.exports = {
+     ...
+     module: {
+       rules: [
+         {
+           test: /\.css$/i,
+           // make sure order is style-loader>>css-loader
+           use: ['style-loader', 'css-loader'],
+         },
+       ],
+     },
+   };
+   ```
+3. config custom `*.js`
+```js
+import './*.css';
+...
 ```
