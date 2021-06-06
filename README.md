@@ -1,5 +1,43 @@
 # learnWebpack
 
+# Principle
+## Work principle
+```
+|---------------------------------------|
+||--------|  |--------|                 |
+||JS entry|>>|Module A|                 |
+||--------|  |--------|     ...         |
+|    ↓           ↓           ↑          |
+||--------|  |--------|  |--------|     |
+||Module B|>>|Module C|>>|Module D|     |
+||--------|  |--------|  |--------|     |
+|    ↓           ↑           ↓          |
+||--------|  |--------|  |--------|     |
+||Module E|>>|Module F|<<|Module G|>>...|
+||--------|  |--------|  |--------|     |
+|---------------------------------------|
+             Web ↓ pack
+          |--------------|
+          | |----------| |
+          | | bundle.js| |
+          | |----------| |
+          |      ↓       |
+          | |----------| |
+          | |index.html| |
+          | |----------| |
+          |--------------|
+```
+## Project structure
+```bash
+|-public # store static pages(*.html)
+| |--*.html
+|-app # store dynamics, such as: *.js, *.css
+| |--main.js # project & depend-analyze entry
+| |--*.js
+| |--*.css
+|-package.json
+```
+
 # Environment
 ## NodeJs
 update to the last stable version
@@ -16,9 +54,14 @@ npm install -g npm
 
 # Setup
 ## Project
-```bash
-npm init
-```
++ new
+  ```bash
+  npm init
+  ```
++ load exist
+  ```bash
+  npm install
+  ```
 ## Dependency
 ```bash
 # provided dependency
