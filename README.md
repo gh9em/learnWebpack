@@ -353,6 +353,7 @@ import pngImg from './*.png';
     ...
     module.exports = {
       ...
+      mode: 'development',
       output: {
         // server context-path
         publicPath: '/',
@@ -389,15 +390,16 @@ import pngImg from './*.png';
     };
     ```
 + webpack-dev-server(webpack's Watch Mode + webpack-dev-middleware)
-  1. add dependency
+  1. ~~add dependency~~
     ```bash
     npm install --save-dev webpack-dev-server
     ```
-  2. config `webpack.config.js`
+  2. ~~config `webpack.config.js`~~
     ```js
     ...
     module.exports = {
       ...
+      mode: 'development',
       devServer: {
         // server webapp-path
         contentBase: './dist',
