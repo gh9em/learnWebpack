@@ -1,13 +1,24 @@
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const yaml = require('yamljs');
 
 module.exports = {
     // webpack entry
-    entry: './src/index.js',
-    output: {
-        filename: 'bundle.js',
-        path: path.resolve(__dirname, 'dist'),
+    entry: {
+      index: './src/index.js',
     },
+    output: {
+        filename: '[name].bundle.js',
+        path: path.resolve(__dirname, 'dist'),
+        // clean dist before compile
+        clean: true,
+    },
+    plugins: [
+      // output index.html
+      new HtmlWebpackPlugin({
+        title: 'Hello Webpack',
+      }),
+    ],
     module: {
       rules: [
         {

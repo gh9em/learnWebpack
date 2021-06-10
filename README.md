@@ -37,11 +37,11 @@
 ## Project structure
 ```bash
 |-dist
-| |--bundle.js # webpack output
+| |--index.html # import *.bundle.js with <script> tags
+| |--*.bundle.js # webpack outputs
 |-src
-| |--index.js # webpack entry
+| |--*.js # includes webpack entries
 | |--*.html
-| |--*.js
 | |--*.css
 | |--*.png
 | |--*.woff
@@ -86,13 +86,24 @@ npm install -g npm
      // npm not support `import` yet
      // import 'path';
      const path = require('path');
+     const HtmlWebpackPlugin = require('html-webpack-plugin');
 
      module.exports = {
        // webpack entry
-       entry: './src/index.js',
+       entry: {
+         index: './src/index.js',
+       },
+       plugins: [
+         // output index.html
+         new HtmlWebpackPlugin({
+           title: 'Hello Webpack',
+         }),
+       ],
        output: {
-         filename: 'main.js',
+         filename: '[name].bundle.js',
          path: path.resolve(__dirname, 'dist'),
+         // clean dist before compile
+         clean: true,
        },
      };
      ```
@@ -104,12 +115,14 @@ npm install -g npm
 ```bash
 # `--save-dev` means provided dependency
 npm install --save-dev webpack
+npm install --save-dev html-webpack-plugin
 ```
 # Compile
 ```bash
 # npx webpack(since Node@8.2 and npm@5.2.0)
 node_modules/.bin/webpack --config webpack.config.js
 ```
+
 # Loader
 ## CSS Loader
 ### Principle
