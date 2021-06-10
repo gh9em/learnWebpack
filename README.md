@@ -318,3 +318,99 @@ import pngImg from './*.png';
 }
 ...
 ```
+# Debug
+## Keep Signature
+### Usage
+1. config `webpack.config.js`
+   ```js
+   ...
+   module.exports = {
+     ...
+     mode: 'development',
+     devtool: 'inline-source-map',
+   };
+   ```
+## Hot Deploy
+### Usage
++ webpack's Watch Mode
+  1. config `package.json` or run command `npx webpack --watch`
+    ```js
+    {
+      ...
+      "scripts": {
+        ...
+        "watch": "webpack --watch",
+      },
+    };
+    ```
++ webpack-dev-middleware(Express middleware)
+  1. add dependency
+    ```bash
+    npm install --save-dev webpack-dev-middleware
+    ```
+  2. config `webpack.config.js`
+    ```js
+    ...
+    module.exports = {
+      ...
+      output: {
+        // server context-path
+        publicPath: '/',
+      },
+    };
+    ```
+  3. add `server.js`
+    ```js
+    const express = require('express');
+    const webpack = require('webpack');
+    const webpackDevMiddleware = require('webpack-dev-middleware');
+
+    const app = express();
+    const config = require('./webpack.config.js');
+    const compiler = webpack(config);
+
+    app.use(
+      webpackDevMiddleware(compiler, {
+        publicPath: config.output.publicPath,
+      })
+    );
+    app.listen(8080, function () {
+      console.log('Webpack Server listening on port 8080!\n');
+    });
+    ```
+  4. config `package.json` or run command `node server.js`
+    ```js
+    {
+      ...
+      "scripts": {
+        ...
+        "server": "node server.js",
+      },
+    };
+    ```
++ webpack-dev-server(webpack's Watch Mode + webpack-dev-middleware)
+  1. add dependency
+    ```bash
+    npm install --save-dev webpack-dev-server
+    ```
+  2. config `webpack.config.js`
+    ```js
+    ...
+    module.exports = {
+      ...
+      devServer: {
+        // server webapp-path
+        contentBase: './dist',
+      },
+    };
+    ```
+  3. config `package.json` or run command `npx webpack serve --open`
+    ```js
+    {
+      ...
+      "scripts": {
+        ...
+        "start": "webpack serve --open",
+      },
+    };
+    ```
