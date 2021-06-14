@@ -66,7 +66,7 @@ npm install -g npm
 
 # Setup
 ## Project
-+ new
++ new application
   1. init
      ```bash
      npm init
@@ -105,6 +105,47 @@ npm install -g npm
          // clean dist before compile
          clean: true,
        },
+     };
+     ```
++ new library
+  1. init
+     ```bash
+     npm init
+     mkdir src
+     ```
+  2. create `webpack.config.js`
+     ```js
+     // npm not support `import` yet
+     // import 'path';
+     const path = require('path');
+
+     module.exports = {
+       // webpack entry
+       entry: {
+         index: './src/index.js',
+       },
+       output: {
+         filename: 'library.js',
+         library: {
+           name: 'libraryName',
+           type: 'umd',
+         },
+         path: path.resolve(__dirname, 'dist'),
+         // clean dist before compile
+         clean: true,
+       },
+       // provided dependency, see more https://www.tangshuang.net/3343.html
+       externals: [
+         jQuery: {
+           commonjs: 'jQuery',
+           commonjs2: 'jQuery',
+           amd: 'jQuery',
+           // import by <scrpit> tag
+           root: '$',
+         },
+         'xxx',
+         /xxx/,
+       ],
      };
      ```
 + load exist
