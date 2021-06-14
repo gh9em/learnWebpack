@@ -173,15 +173,41 @@ node_modules/.bin/webpack --config webpack.config.js
    };
    ```
 2. config `package.json` or run command `npx webpack --env key=value`
-    ```js
+    ```json
     {
       ...
       "scripts": {
         ...
-        "watch": "webpack --env key=value",
+        "env": "webpack --env key=value",
       },
     };
     ```
+# Profile
+## Usage
+1. add dependency
+   ```bash
+   npm install --save-dev webpack-merge
+   ```
+2. create `webpack.config.xxx.js`
+   ```js
+   const { merge } = require('webpack-merge');
+   const common = require('./webpack.config.js');
+   ...
+   module.exports = merge(common, {
+     ...
+   };
+   ```
+3. config `package.json` or run command `npx webpack serve --open --config webpack.config.xxx.js`(dev) / `npx webpack --config webpack.config.xxx.js`(prod)
+```json
+{
+  ...
+  "scripts": {
+    ...
+    "startxxx": "webpack serve --open --config webpack.config.xxx.js",
+    "buildxxx": "webpack --config webpack.config.xxx.js",
+  },
+};
+```
 # Pre Module
 ## Principle
 ```
@@ -485,7 +511,7 @@ import pngImg from './*.png';
 ### Usage
 + webpack's Watch Mode
   1. config `package.json` or run command `npx webpack --watch`
-    ```js
+    ```json
     {
       ...
       "scripts": {
@@ -531,7 +557,7 @@ import pngImg from './*.png';
     });
     ```
   4. config `package.json` or run command `node server.js`
-    ```js
+    ```json
     {
       ...
       "scripts": {
@@ -558,7 +584,7 @@ import pngImg from './*.png';
     };
     ```
   3. config `package.json` or run command `npx webpack serve --open`
-    ```js
+    ```json
     {
       ...
       "scripts": {
