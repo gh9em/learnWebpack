@@ -183,6 +183,7 @@ node_modules/.bin/webpack --config webpack.config.js
     };
     ```
 # Profile
+see more [profile with nodeJs process.env.NODE_ENV](https://www.cnblogs.com/ShuiNian/p/13211750.html)
 ## Usage
 1. add dependency
    ```bash
