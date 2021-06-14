@@ -100,7 +100,7 @@ npm install -g npm
          }),
        ],
        output: {
-         filename: '[name].bundle.js',
+         filename: '[name].[contenthash].bundle.js',
          path: path.resolve(__dirname, 'dist'),
          // clean dist before compile
          clean: true,
@@ -122,12 +122,37 @@ npm install --save-dev html-webpack-plugin
 # npx webpack(since Node@8.2 and npm@5.2.0)
 node_modules/.bin/webpack --config webpack.config.js
 ```
-# Shared Module
+# Pre Module
 ## Principle
-
+```
+time>>>>>>>>>
+  ↓ |----------------------| |-----------|
+  ↓ |      Preload JS      | |current JS |
+  ↓ |(<link rel="preload">)| |(<script>) |
+  ↓ |----------------------| |-----------|
+----------------------------------------------
+  ↓              |-----------------------|
+  ↓              |      Prefetch JS      |
+  ↓              |(<link rel="prefetch">)|
+  ↓              |-----------------------|
+  ↓
+```
+## Usage
++ Preload: config `*.js`
+  ```js
+  ...
+  // such as loading dialog
+  import(/* webpackPreload: true */ 'xxx');
+  ```
++ Prefetch: config `*.js`
+  ```js
+  ...
+  import(/* webpackFetch: true */ 'xxx');
+  ```
+# Shared Module
 ## Usage
 + static
-  + `dependOn`: config `webpack.config.js`
+  + `dependOn` field: config `webpack.config.js`
     ```js
     ...
     module.exports = {
@@ -144,13 +169,22 @@ node_modules/.bin/webpack --config webpack.config.js
         },
         xxx: 'sharedLibName',
       },
-      // global scope export for import multi entry
       optimization: {
+        // global scope export for import multi entry
         runtimeChunk: 'single',
+        splitChunks: {
+          cacheGroups: {
+            vendor: {
+              test: /[\\/]node_modules[\\/]/,
+              name: 'vendors',
+              chunks: 'all',
+            },
+          },
+        },
       },
     };
     ```
-  + SplitChunksPlugin: config `webpack.config.js`
+  + SplitChunks plugin: config `webpack.config.js`
     ```js
     ...
     module.exports = {
@@ -168,7 +202,7 @@ node_modules/.bin/webpack --config webpack.config.js
     };
     ```
 + dynamic
-  + `import('xxx')`: config `*.js`
+  + `import` func: config `*.js`
   ```js
   async function func() {
     // deconstruct module.exports object's field `default` to `$`
