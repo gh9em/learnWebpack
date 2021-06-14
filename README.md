@@ -170,9 +170,10 @@ time>>>>>>>>>
         xxx: 'sharedLibName',
       },
       optimization: {
-        // global scope export for import multi entry
+        // export global runtime code to import multi entries
         runtimeChunk: 'single',
         splitChunks: {
+          // separate third modules when export
           cacheGroups: {
             vendor: {
               test: /[\\/]node_modules[\\/]/,
