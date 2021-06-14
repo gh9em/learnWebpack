@@ -163,6 +163,25 @@ npm install --save-dev html-webpack-plugin
 # npx webpack(since Node@8.2 and npm@5.2.0)
 node_modules/.bin/webpack --config webpack.config.js
 ```
+# Enviroment
+## Usage
+1. config `webpack.config.js`
+   ```js
+   ...
+   module.exports = (env) => {
+     ...
+   };
+   ```
+2. config `package.json` or run command `npx webpack --env key=value`
+    ```js
+    {
+      ...
+      "scripts": {
+        ...
+        "watch": "webpack --env key=value",
+      },
+    };
+    ```
 # Pre Module
 ## Principle
 ```
