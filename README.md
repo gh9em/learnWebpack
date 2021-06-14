@@ -122,7 +122,62 @@ npm install --save-dev html-webpack-plugin
 # npx webpack(since Node@8.2 and npm@5.2.0)
 node_modules/.bin/webpack --config webpack.config.js
 ```
+# Shared Module
+## Principle
 
+## Usage
++ static
+  + `dependOn`: config `webpack.config.js`
+    ```js
+    ...
+    module.exports = {
+      ...
+      // webpack entry
+      entry: {
+        index: {
+          import: './src/index.js',
+          dependOn: 'xxx'
+        },
+        generator: {
+          import: './src/generator.js',
+          dependOn: 'xxx'
+        },
+        xxx: 'sharedLibName',
+      },
+      // global scope export for import multi entry
+      optimization: {
+        runtimeChunk: 'single',
+      },
+    };
+    ```
+  + SplitChunksPlugin: config `webpack.config.js`
+    ```js
+    ...
+    module.exports = {
+      ...
+      // webpack entry
+      entry: {
+        index: './src/index.js',
+        generator: './src/generator.js',
+      },
+      optimization: {
+        splitChunks: {
+          chunks: 'all',
+        },
+      },
+    };
+    ```
++ dynamic
+  + `import('xxx')`: config `*.js`
+  ```js
+  async function func() {
+    // deconstruct module.exports object's field `default` to `$`
+    const { default: $ } = await import('jQuery');
+    ...
+  };
+  ...
+  func().then(...);
+  ```
 # Loader
 ## CSS Loader
 ### Principle
