@@ -172,16 +172,6 @@ time>>>>>>>>>
       optimization: {
         // export global runtime code to import multi entries
         runtimeChunk: 'single',
-        splitChunks: {
-          // separate third modules when export
-          cacheGroups: {
-            vendor: {
-              test: /[\\/]node_modules[\\/]/,
-              name: 'vendors',
-              chunks: 'all',
-            },
-          },
-        },
       },
     };
     ```
@@ -196,9 +186,20 @@ time>>>>>>>>>
         generator: './src/generator.js',
       },
       optimization: {
+        // export global runtime code to import multi entries
+        runtimeChunk: 'single',
         splitChunks: {
-          chunks: 'all',
+          // separate third modules when export
+          cacheGroups: {
+            vendor: {
+              test: /[\\/]node_modules[\\/]/,
+              name: 'vendors',
+              chunks: 'all',
+            },
+          },
         },
+        // keep ids of separated third module when export
+        moduleIds: 'deterministic',
       },
     };
     ```
