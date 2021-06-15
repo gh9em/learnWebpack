@@ -76,7 +76,7 @@ npm install -g npm
      ```json
      {
        ...
-       // instead of entry field `"main": "index.js",`
+       # instead of entry field `"main": "index.js",`
        "private": true,
        ...
      }
